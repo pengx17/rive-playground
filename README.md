@@ -1,54 +1,75 @@
-# React + TypeScript + Vite
+# Rive Playground
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React application for interactive testing and visualization of Rive animations. This playground allows you to upload, view, and interact with Rive animations directly in the browser.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Upload and view Rive animation files
+- Inspect animation structure, artboards, state machines, and inputs
+- Play and control animations
+- Test state machine interactions
+- Responsive layout with modern UI
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- React 19
+- TypeScript
+- Vite
+- Tailwind CSS
+- Shadcn UI components
+- Rive React Canvas library
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Getting Started
+
+### Prerequisites
+
+- Node.js (LTS version recommended)
+- pnpm
+
+### Installation
+
+1. Clone the repository
+
+```bash
+git clone https://github.com/yourusername/rive-playground.git
+cd rive-playground
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+2. Install dependencies
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+```bash
+pnpm install
 ```
+
+3. Start the development server
+
+```bash
+pnpm dev
+```
+
+4. Open your browser and navigate to `http://localhost:5173`
+
+## Usage
+
+1. Upload a Rive animation file (.riv)
+2. The playground will display the animation
+3. Explore artboards, animations, and state machines
+4. Test inputs and interactions with the animation
+
+## Building for Production
+
+```bash
+pnpm build
+```
+
+The build artifacts will be stored in the `dist/` directory.
+
+## License
+
+This project is open source under the MIT license.
+
+## Acknowledgements
+
+- [Rive](https://rive.app/) for the animation runtime
+- [React](https://reactjs.org/) framework
+- [Shadcn UI](https://ui.shadcn.com/) for UI components
