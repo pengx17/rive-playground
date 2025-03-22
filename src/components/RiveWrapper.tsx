@@ -36,6 +36,8 @@ interface RiveWrapperProps {
   onRiveInit?: (riveObj: Rive) => void;
   fit?: Fit;
   alignment?: Alignment;
+  isPlaying?: boolean;
+  onPlayStateChange?: (isPlaying: boolean) => void;
 }
 
 export function RiveWrapper({
@@ -49,24 +51,24 @@ export function RiveWrapper({
   onRiveInit,
   fit = Fit.Contain,
   alignment = Alignment.Center,
+  isPlaying = true,
+  onPlayStateChange,
 }: RiveWrapperProps) {
   const contentLoadedRef = useRef(false);
   const riveRef = useRef<Rive | null>(null);
-  const layoutRef = useRef(new Layout({ fit, alignment }));
 
   // Update layout when fit or alignment changes
   useEffect(() => {
-    layoutRef.current = new Layout({ fit, alignment });
     if (riveRef.current) {
-      riveRef.current.layout = layoutRef.current;
+      riveRef.current.layout = new Layout({ fit, alignment });
     }
   }, [fit, alignment]);
 
   const { rive, RiveComponent } = useRive({
     src,
-    autoplay: true,
+    autoplay: false, // Don't autoplay, we'll control it manually
     artboard,
-    layout: layoutRef.current,
+    layout: new Layout({ fit, alignment }),
   });
 
   // Keep track of the rive instance
@@ -79,14 +81,29 @@ export function RiveWrapper({
         console.log("DEBUG RiveWrapper: Calling onRiveInit with rive instance");
         onRiveInit(rive);
       }
+
+      // Set up event listeners for playback state
+      const handlePlay = () => onPlayStateChange?.(true);
+      const handlePause = () => onPlayStateChange?.(false);
+      const handleStop = () => onPlayStateChange?.(false);
+
+      rive.on(EventType.Play, handlePlay);
+      rive.on(EventType.Pause, handlePause);
+      rive.on(EventType.Stop, handleStop);
+
+      return () => {
+        rive.off(EventType.Play, handlePlay);
+        rive.off(EventType.Pause, handlePause);
+        rive.off(EventType.Stop, handleStop);
+      };
     }
-  }, [rive, onRiveInit]);
+  }, [rive, onRiveInit, onPlayStateChange]);
 
   // Handle animation changes without remounting
   useEffect(() => {
     if (!rive || !rive.contents) return;
 
-    // If we have an animation, play it
+    // If we have an animation, handle it
     if (animation) {
       try {
         // Stop any current animations
@@ -133,17 +150,17 @@ export function RiveWrapper({
           }
         }
 
-        // Play the new animation
-        setTimeout(() => {
-          if (rive) {
-            rive.play(animation);
-          }
-        }, 50);
+        // Handle the animation based on play state
+        if (isPlaying) {
+          rive.play(animation);
+        } else {
+          rive.pause(animation);
+        }
       } catch (err) {
-        console.error("Error playing animation:", err);
+        console.error("Error handling animation:", err);
       }
     }
-  }, [rive, animation, stateMachine, onStateChanged]);
+  }, [rive, animation, stateMachine, onStateChanged, isPlaying]);
 
   // Handle state machine changes
   useEffect(() => {

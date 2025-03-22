@@ -26,6 +26,8 @@ interface RivePreviewProps {
   fit?: Fit;
   alignment?: Alignment;
   backgroundStyle?: string;
+  isPlaying?: boolean;
+  onPlayStateChange?: (isPlaying: boolean) => void;
 }
 
 export function RivePreview({
@@ -45,6 +47,8 @@ export function RivePreview({
   fit = Fit.Contain,
   alignment = Alignment.Center,
   backgroundStyle = "grid",
+  isPlaying = true,
+  onPlayStateChange,
 }: RivePreviewProps) {
   const hasArtboards = artboards.length > 0;
 
@@ -77,6 +81,8 @@ export function RivePreview({
               onRiveInit={onRiveInit}
               fit={fit}
               alignment={alignment}
+              isPlaying={isPlaying}
+              onPlayStateChange={onPlayStateChange}
             />
           </div>
         </CardContent>

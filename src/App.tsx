@@ -33,6 +33,8 @@ function App() {
   const [artboards, setArtboards] = useState<string[]>([]);
   const [animations, setAnimations] = useState<string[]>([]);
   const [stateMachines, setStateMachines] = useState<string[]>([]);
+  const [riveInstance, setRiveInstance] = useState<Rive | null>(null);
+  const [isPlaying, setIsPlaying] = useState(true);
 
   // Selection state
   const [selectedArtboard, setSelectedArtboard] = useState("");
@@ -191,6 +193,7 @@ function App() {
 
   const handleRiveInstance = useCallback((riveObj: Rive) => {
     console.log("Got Rive instance:", riveObj);
+    setRiveInstance(riveObj);
   }, []);
 
   const handleLayoutChange = useCallback(
@@ -200,6 +203,10 @@ function App() {
     },
     []
   );
+
+  const handleBackgroundChange = useCallback((newBackground: string) => {
+    // Implementation of handleBackgroundChange
+  }, []);
 
   return (
     <div className="max-w-7xl mx-auto p-6 font-sans">
@@ -257,6 +264,8 @@ function App() {
                   animations={animations}
                   stateMachines={stateMachines}
                   stateMachineInputs={stateMachineInputs}
+                  isPlaying={isPlaying}
+                  onPlayStateChange={setIsPlaying}
                 />
               </div>
             }
@@ -275,8 +284,10 @@ function App() {
                   onArtboardChange={setSelectedArtboard}
                   onAnimationChange={setSelectedAnimation}
                   onStateMachineChange={setSelectedStateMachine}
+                  riveInstance={riveInstance}
                   onLayoutChange={handleLayoutChange}
-                  riveInstance={null}
+                  onBackgroundChange={handleBackgroundChange}
+                  isPlaying={isPlaying}
                 />
               </div>
             }

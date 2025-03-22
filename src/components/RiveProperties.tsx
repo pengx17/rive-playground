@@ -27,6 +27,7 @@ interface RivePropertiesProps {
   riveInstance: Rive | null;
   onLayoutChange?: (fit: Fit, alignment: Alignment) => void;
   onBackgroundChange?: (style: string) => void;
+  isPlaying: boolean;
 }
 
 const FIT_OPTIONS = [
@@ -90,11 +91,11 @@ export function RiveProperties({
   riveInstance,
   onLayoutChange,
   onBackgroundChange,
+  isPlaying,
 }: RivePropertiesProps) {
   const hasArtboards = artboards.length > 0;
   const hasAnimations = animations.length > 0;
   const hasStateMachines = stateMachines.length > 0;
-  const [isPlaying, setIsPlaying] = useState(true);
   const [selectedFit, setSelectedFit] = useState<Fit>(Fit.Contain);
   const [selectedAlignment, setSelectedAlignment] = useState<Alignment>(
     Alignment.Center
@@ -108,12 +109,16 @@ export function RiveProperties({
   const toggleAnimation = () => {
     if (!riveInstance || !selectedAnimation) return;
 
-    if (isPlaying) {
-      riveInstance.pause(selectedAnimation);
-    } else {
-      riveInstance.play(selectedAnimation);
+    try {
+      if (isPlaying) {
+        riveInstance.pause(selectedAnimation);
+      } else {
+        riveInstance.reset({ animations: [selectedAnimation] });
+        riveInstance.play(selectedAnimation);
+      }
+    } catch (err) {
+      console.warn("Error toggling animation:", err);
     }
-    setIsPlaying(!isPlaying);
   };
 
   return (
@@ -179,7 +184,14 @@ export function RiveProperties({
                       onAnimationChange(value);
                       if (value !== "") {
                         onStateMachineChange("");
-                        setIsPlaying(true);
+                        if (riveInstance) {
+                          try {
+                            riveInstance.reset({ animations: [value] });
+                            riveInstance.play(value);
+                          } catch (err) {
+                            console.warn("Error playing animation:", err);
+                          }
+                        }
                       }
                     }}
                   >
