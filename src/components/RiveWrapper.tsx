@@ -60,7 +60,9 @@ export function RiveWrapper({
   // Update layout when fit or alignment changes
   useEffect(() => {
     if (riveRef.current) {
+      riveRef.current.stopRendering();
       riveRef.current.layout = new Layout({ fit, alignment });
+      riveRef.current.startRendering();
     }
   }, [fit, alignment]);
 

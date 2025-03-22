@@ -26,7 +26,6 @@ interface RivePropertiesProps {
   onStateMachineChange: (value: string) => void;
   riveInstance: Rive | null;
   onLayoutChange?: (fit: Fit, alignment: Alignment) => void;
-  onBackgroundChange?: (style: string) => void;
   isPlaying: boolean;
 }
 
@@ -72,12 +71,6 @@ const ALIGNMENT_OPTIONS = [
   },
 ] as const;
 
-const BACKGROUND_STYLES = [
-  { label: "Grid", value: "grid" },
-  { label: "Dots", value: "dots" },
-  { label: "None", value: "none" },
-];
-
 export function RiveProperties({
   artboards,
   animations,
@@ -90,7 +83,6 @@ export function RiveProperties({
   onStateMachineChange,
   riveInstance,
   onLayoutChange,
-  onBackgroundChange,
   isPlaying,
 }: RivePropertiesProps) {
   const hasArtboards = artboards.length > 0;
@@ -100,7 +92,6 @@ export function RiveProperties({
   const [selectedAlignment, setSelectedAlignment] = useState<Alignment>(
     Alignment.Center
   );
-  const [selectedBackground, setSelectedBackground] = useState("grid");
 
   useEffect(() => {
     onLayoutChange?.(selectedFit, selectedAlignment);
@@ -277,7 +268,7 @@ export function RiveProperties({
 
       <Card>
         <CardHeader>
-          <CardTitle>Layout & Background</CardTitle>
+          <CardTitle>Layout</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-6">
@@ -341,38 +332,6 @@ export function RiveProperties({
                   ))}
                 </SelectContent>
               </Select>
-            </div>
-
-            <div className="space-y-1">
-              <label className="block text-sm font-medium mb-2">
-                Background:
-              </label>
-              <RadioGroup
-                value={selectedBackground}
-                onValueChange={(value) => {
-                  setSelectedBackground(value);
-                  onBackgroundChange?.(value);
-                }}
-                className="flex flex-col space-y-2"
-              >
-                {BACKGROUND_STYLES.map((style) => (
-                  <div
-                    key={style.value}
-                    className="flex items-center space-x-2"
-                  >
-                    <RadioGroupItem
-                      value={style.value}
-                      id={`bg-${style.value}`}
-                    />
-                    <label
-                      htmlFor={`bg-${style.value}`}
-                      className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      {style.label}
-                    </label>
-                  </div>
-                ))}
-              </RadioGroup>
             </div>
           </div>
         </CardContent>

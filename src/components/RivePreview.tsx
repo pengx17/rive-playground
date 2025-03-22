@@ -7,7 +7,6 @@ import {
   Fit,
   Alignment,
 } from "@rive-app/react-canvas";
-import { cn } from "@/lib/utils";
 
 interface RivePreviewProps {
   riveKey: number;
@@ -25,7 +24,6 @@ interface RivePreviewProps {
   stateMachineInputs: Record<string, StateMachineInput>;
   fit?: Fit;
   alignment?: Alignment;
-  backgroundStyle?: string;
   isPlaying?: boolean;
   onPlayStateChange?: (isPlaying: boolean) => void;
 }
@@ -46,7 +44,6 @@ export function RivePreview({
   stateMachineInputs,
   fit = Fit.Contain,
   alignment = Alignment.Center,
-  backgroundStyle = "grid",
   isPlaying = true,
   onPlayStateChange,
 }: RivePreviewProps) {
@@ -59,16 +56,7 @@ export function RivePreview({
           <CardTitle>Preview</CardTitle>
         </CardHeader>
         <CardContent>
-          <div
-            className={cn(
-              "rounded-md h-[400px] flex items-center justify-center overflow-hidden",
-              {
-                "bg-neutral-50": backgroundStyle === "none",
-                "bg-grid-slate-200": backgroundStyle === "grid",
-                "bg-dot-slate-300": backgroundStyle === "dots",
-              }
-            )}
-          >
+          <div className="rounded-md h-[400px] flex items-center justify-center overflow-hidden bg-neutral-50">
             <RiveWrapper
               key={riveKey}
               src={riveFileUrl}

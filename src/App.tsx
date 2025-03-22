@@ -204,10 +204,6 @@ function App() {
     []
   );
 
-  const handleBackgroundChange = useCallback((newBackground: string) => {
-    // Implementation of handleBackgroundChange
-  }, []);
-
   return (
     <div className="max-w-7xl mx-auto p-6 font-sans">
       <Card className="mb-8">
@@ -286,7 +282,6 @@ function App() {
                   onStateMachineChange={setSelectedStateMachine}
                   riveInstance={riveInstance}
                   onLayoutChange={handleLayoutChange}
-                  onBackgroundChange={handleBackgroundChange}
                   isPlaying={isPlaying}
                 />
               </div>
